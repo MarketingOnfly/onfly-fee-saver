@@ -80,8 +80,8 @@ const CostCalculator = () => {
       custoConcorrente = mensalidadeConcorrente + feeGMV + feeNecessidades;
     }
 
-    // Limitar valor dos concorrentes a no máximo 4.5x o valor da Onfly
-    const maxCustoConcorrente = custoOnfly * 4.5;
+    // Limitar valor dos concorrentes a no máximo 3.5x o valor da Onfly
+    const maxCustoConcorrente = custoOnfly * 3.5;
     if (custoConcorrente > maxCustoConcorrente) {
       custoConcorrente = maxCustoConcorrente;
     }
