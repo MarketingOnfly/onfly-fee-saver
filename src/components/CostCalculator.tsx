@@ -9,7 +9,6 @@ import { Calculator, TrendingDown, Users, Briefcase, DollarSign } from 'lucide-r
 interface CalculatorInputs {
   gmv: number;
   colaboradores: number;
-  viajantes: number;
   mensalidadeConcorrente: number;
   feeAdicional: number;
   useDefaults: boolean;
@@ -19,13 +18,13 @@ interface Results {
   custoConcorrente: number;
   custoOnfly: number;
   economia: number;
+  showSpecialistMessage: boolean;
 }
 
 const CostCalculator = () => {
   const [inputs, setInputs] = useState<CalculatorInputs>({
     gmv: 0,
     colaboradores: 0,
-    viajantes: 0,
     mensalidadeConcorrente: 0,
     feeAdicional: 2.0,
     useDefaults: false
@@ -34,11 +33,38 @@ const CostCalculator = () => {
   const [results, setResults] = useState<Results>({
     custoConcorrente: 0,
     custoOnfly: 0,
-    economia: 0
+    economia: 0,
+    showSpecialistMessage: false
   });
 
   const calculateResults = () => {
-    const { gmv, colaboradores, viajantes, mensalidadeConcorrente, feeAdicional, useDefaults } = inputs;
+    const { gmv, colaboradores, mensalidadeConcorrente, feeAdicional, useDefaults } = inputs;
+
+    // Verificar se há mais de 1500 colaboradores
+    if (colaboradores > 1500) {
+      setResults({ 
+        custoConcorrente: 0, 
+        custoOnfly: 0, 
+        economia: 0, 
+        showSpecialistMessage: true 
+      });
+      return;
+    }
+
+    // Calcular número de viajantes (40% dos colaboradores)
+    const viajantes = Math.round(colaboradores * 0.4);
+
+    // Cálculo Onfly - Fee escalonado baseado no número de colaboradores
+    let taxaOnfly = 0.01; // 1%
+    if (colaboradores <= 50) {
+      taxaOnfly = 0.01; // 1%
+    } else if (colaboradores <= 700) {
+      taxaOnfly = 0.011; // 1.1%
+    } else if (colaboradores <= 1500) {
+      taxaOnfly = 0.012; // 1.2%
+    }
+
+    const custoOnfly = gmv * taxaOnfly;
 
     // Cálculo Concorrente
     let custoConcorrente = 0;
@@ -54,18 +80,15 @@ const CostCalculator = () => {
       custoConcorrente = mensalidadeConcorrente + feeGMV + feeNecessidades;
     }
 
-    // Cálculo Onfly - Fee escalonado
-    let taxaOnfly = 0.01; // 1%
-    if (gmv > 50000 && gmv <= 150000) {
-      taxaOnfly = 0.011; // 1.1%
-    } else if (gmv > 150000) {
-      taxaOnfly = 0.012; // 1.2%
+    // Limitar valor dos concorrentes a no máximo 4.5x o valor da Onfly
+    const maxCustoConcorrente = custoOnfly * 4.5;
+    if (custoConcorrente > maxCustoConcorrente) {
+      custoConcorrente = maxCustoConcorrente;
     }
 
-    const custoOnfly = gmv * taxaOnfly;
     const economia = custoConcorrente - custoOnfly;
 
-    setResults({ custoConcorrente, custoOnfly, economia });
+    setResults({ custoConcorrente, custoOnfly, economia, showSpecialistMessage: false });
   };
 
   useEffect(() => {
@@ -123,29 +146,16 @@ const CostCalculator = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="colaboradores" className="text-sm font-medium">Nº Colaboradores</Label>
-                  <Input
-                    id="colaboradores"
-                    type="number"
-                    value={inputs.colaboradores || ''}
-                    onChange={(e) => handleInputChange('colaboradores', Number(e.target.value))}
-                    placeholder="Ex: 50"
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="viajantes" className="text-sm font-medium">Nº Viajantes</Label>
-                  <Input
-                    id="viajantes"
-                    type="number"
-                    value={inputs.viajantes || ''}
-                    onChange={(e) => handleInputChange('viajantes', Number(e.target.value))}
-                    placeholder="Ex: 30"
-                    className="mt-1"
-                  />
-                </div>
+              <div>
+                <Label htmlFor="colaboradores" className="text-sm font-medium">Nº Colaboradores</Label>
+                <Input
+                  id="colaboradores"
+                  type="number"
+                  value={inputs.colaboradores || ''}
+                  onChange={(e) => handleInputChange('colaboradores', Number(e.target.value))}
+                  placeholder="Ex: 50"
+                  className="mt-1"
+                />
               </div>
 
               <div className="flex items-center space-x-2">
@@ -223,27 +233,15 @@ const CostCalculator = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-sm font-medium">Nº Colaboradores</Label>
-                  <Input
-                    type="number"
-                    value={inputs.colaboradores || ''}
-                    onChange={(e) => handleInputChange('colaboradores', Number(e.target.value))}
-                    placeholder="Ex: 50"
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label className="text-sm font-medium">Nº Viajantes</Label>
-                  <Input
-                    type="number"
-                    value={inputs.viajantes || ''}
-                    onChange={(e) => handleInputChange('viajantes', Number(e.target.value))}
-                    placeholder="Ex: 30"
-                    className="mt-1"
-                  />
-                </div>
+              <div>
+                <Label className="text-sm font-medium">Nº Colaboradores</Label>
+                <Input
+                  type="number"
+                  value={inputs.colaboradores || ''}
+                  onChange={(e) => handleInputChange('colaboradores', Number(e.target.value))}
+                  placeholder="Ex: 50"
+                  className="mt-1"
+                />
               </div>
 
               <div>
@@ -266,49 +264,66 @@ const CostCalculator = () => {
       </div>
 
       {/* Results */}
-      <Card className="p-8 bg-gradient-subtle">
-        <div className="text-center space-y-6">
-          <h3 className="text-2xl font-bold text-foreground">Resultado da Comparação</h3>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-6 bg-competitor-light rounded-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Briefcase className="w-5 h-5 text-competitor" />
-                <span className="text-sm font-medium text-competitor">Concorrentes</span>
-              </div>
-              <p className="text-2xl font-bold text-competitor">{formatCurrency(results.custoConcorrente)}</p>
-              <p className="text-xs text-muted-foreground mt-1">Custo mensal total</p>
-            </div>
-
+      {results.showSpecialistMessage ? (
+        <Card className="p-8 bg-gradient-subtle">
+          <div className="text-center space-y-6">
+            <h3 className="text-2xl font-bold text-foreground">Consulte um Vendedor Especialista</h3>
             <div className="p-6 bg-primary/10 rounded-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <TrendingDown className="w-5 h-5 text-primary" />
-                <span className="text-sm font-medium text-primary">Onfly</span>
-              </div>
-              <p className="text-2xl font-bold text-primary">{formatCurrency(results.custoOnfly)}</p>
-              <p className="text-xs text-muted-foreground mt-1">Custo mensal total</p>
-            </div>
-
-            <div className="p-6 bg-success-light rounded-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <DollarSign className="w-5 h-5 text-success" />
-                <span className="text-sm font-medium text-success">Economia</span>
-              </div>
-              <p className={`text-2xl font-bold ${results.economia > 0 ? 'text-success' : 'text-destructive'}`}>
-                {formatCurrency(results.economia)}
+              <p className="text-lg text-primary font-medium mb-2">
+                🎯 Empresas com mais de 1.500 colaboradores
               </p>
-              <p className="text-xs text-muted-foreground mt-1">Economia mensal</p>
+              <p className="text-muted-foreground">
+                Para organizações do seu porte, oferecemos soluções personalizadas e condições especiais. 
+                Entre em contato com nosso time especializado para uma proposta sob medida.
+              </p>
             </div>
           </div>
+        </Card>
+      ) : (
+        <Card className="p-8 bg-gradient-subtle">
+          <div className="text-center space-y-6">
+            <h3 className="text-2xl font-bold text-foreground">Resultado da Comparação</h3>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="p-6 bg-competitor-light rounded-lg">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <Briefcase className="w-5 h-5 text-competitor" />
+                  <span className="text-sm font-medium text-competitor">Concorrentes</span>
+                </div>
+                <p className="text-2xl font-bold text-competitor">{formatCurrency(results.custoConcorrente)}</p>
+                <p className="text-xs text-muted-foreground mt-1">Custo mensal total</p>
+              </div>
 
-          <div className="max-w-2xl mx-auto p-4 bg-muted/50 rounded-lg">
-            <p className="text-sm text-muted-foreground">
-              <strong>Importante:</strong> Esses valores são estimativas de referência. 
-              Para um cálculo preciso e personalizado, entre em contato com nosso time de vendas.
-            </p>
+              <div className="p-6 bg-primary/10 rounded-lg">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <TrendingDown className="w-5 h-5 text-primary" />
+                  <span className="text-sm font-medium text-primary">Onfly</span>
+                </div>
+                <p className="text-2xl font-bold text-primary">{formatCurrency(results.custoOnfly)}</p>
+                <p className="text-xs text-muted-foreground mt-1">Custo mensal total</p>
+              </div>
+
+              <div className="p-6 bg-success-light rounded-lg">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <DollarSign className="w-5 h-5 text-success" />
+                  <span className="text-sm font-medium text-success">Economia</span>
+                </div>
+                <p className={`text-2xl font-bold ${results.economia > 0 ? 'text-success' : 'text-destructive'}`}>
+                  {formatCurrency(results.economia)}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">Economia mensal</p>
+              </div>
+            </div>
+
+            <div className="max-w-2xl mx-auto p-4 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">
+                <strong>Importante:</strong> Esses valores são estimativas de referência. 
+                Para um cálculo preciso e personalizado, entre em contato com nosso time de vendas.
+              </p>
+            </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      )}
     </div>
   );
 };
