@@ -168,7 +168,7 @@ const CostCalculator = () => {
                   value={displayValues.gmv}
                   onChange={(e) => handleFormattedInputChange('gmv', e.target.value)}
                   onBlur={() => handleFormattedInputBlur('gmv')}
-                  placeholder="Ex: 1.000.000"
+                  placeholder="Ex: 1000000"
                   className="mt-1"
                 />
               </div>
@@ -257,7 +257,7 @@ const CostCalculator = () => {
                   value={displayValues.gmv}
                   onChange={(e) => handleFormattedInputChange('gmv', e.target.value)}
                   onBlur={() => handleFormattedInputBlur('gmv')}
-                  placeholder="Ex: 1.000.000"
+                  placeholder="Ex: 1000000"
                   className="mt-1"
                 />
               </div>
