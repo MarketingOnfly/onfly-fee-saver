@@ -96,7 +96,7 @@ const CostCalculator = () => {
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-2 gap-8">
         {/* Concorrentes */}
         <Card className="p-6 border-competitor/20 bg-competitor-light/50">
           <div className="space-y-6">
@@ -258,12 +258,7 @@ const CostCalculator = () => {
               </div>
 
               <div className="p-4 bg-primary/10 rounded-lg">
-                <h4 className="text-sm font-semibold text-primary mb-2">Fee Escalonado Onfly:</h4>
-                <div className="space-y-1 text-xs text-muted-foreground">
-                  <p>• 1% se GMV ≤ R$ 50.000</p>
-                  <p>• 1,1% se R$ 50.000 &lt; GMV ≤ R$ 150.000</p>
-                  <p>• 1,2% se GMV &gt; R$ 150.000</p>
-                </div>
+                <p className="text-sm text-primary font-medium">✓ Fee transparente baseado no GMV</p>
               </div>
             </div>
           </div>
