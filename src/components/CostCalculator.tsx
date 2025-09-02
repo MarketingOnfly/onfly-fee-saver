@@ -26,7 +26,7 @@ const CostCalculator = () => {
     gmv: 0,
     colaboradores: 0,
     mensalidadeConcorrente: 0,
-    feeAdicional: 15,
+    feeAdicional: 0,
     useDefaults: false
   });
 
