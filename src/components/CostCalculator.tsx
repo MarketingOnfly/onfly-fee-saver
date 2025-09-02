@@ -55,13 +55,13 @@ const CostCalculator = () => {
     const viajantes = Math.round(colaboradores * 0.4);
 
     // Cálculo Onfly - Fee escalonado baseado no número de colaboradores
-    let taxaOnfly = 0.01; // 1%
+    let taxaOnfly = 0.0098; // 0.98%
     if (colaboradores <= 50) {
-      taxaOnfly = 0.01; // 1%
+      taxaOnfly = 0.0098; // 0.98%
     } else if (colaboradores <= 700) {
-      taxaOnfly = 0.011; // 1.1%
+      taxaOnfly = 0.0107; // 1.07%
     } else if (colaboradores <= 1500) {
-      taxaOnfly = 0.012; // 1.2%
+      taxaOnfly = 0.0117; // 1.17%
     }
 
     const custoOnfly = gmv * taxaOnfly;
