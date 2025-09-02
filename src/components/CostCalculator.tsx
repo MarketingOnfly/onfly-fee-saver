@@ -172,13 +172,13 @@ const CostCalculator = () => {
               {!inputs.useDefaults && (
                 <div className="space-y-4 p-4 bg-background/50 rounded-lg">
                   <div>
-                    <Label htmlFor="mensalidade" className="text-sm font-medium">Mensalidade (R$)</Label>
+                    <Label htmlFor="mensalidade" className="text-sm font-medium">Mensalidade por usuário (R$)</Label>
                     <Input
                       id="mensalidade"
                       type="number"
                       value={inputs.mensalidadeConcorrente || ''}
                       onChange={(e) => handleInputChange('mensalidadeConcorrente', Number(e.target.value))}
-                      placeholder="Ex: 1500"
+                      placeholder="Ex: 30"
                       className="mt-1"
                     />
                   </div>
@@ -317,8 +317,8 @@ const CostCalculator = () => {
 
             <div className="max-w-2xl mx-auto p-4 bg-muted/50 rounded-lg">
               <p className="text-sm text-muted-foreground">
-                <strong>Importante:</strong> Esses valores são estimativas de referência. 
-                Para um cálculo preciso e personalizado, entre em contato com nosso time de vendas.
+                <strong>Importante:</strong> Estimativas de referência com base em dados proprietários da Onfly, 
+                daí continua para um cálculo preciso e personalizado, entre em contato com nosso time de vendas.
               </p>
             </div>
           </div>
