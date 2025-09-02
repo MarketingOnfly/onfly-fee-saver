@@ -317,8 +317,8 @@ const CostCalculator = () => {
 
             <div className="max-w-2xl mx-auto p-4 bg-muted/50 rounded-lg">
               <p className="text-sm text-muted-foreground">
-                <strong>Importante:</strong> Estimativas de referência com base em dados proprietários da Onfly, 
-                daí continua para um cálculo preciso e personalizado, entre em contato com nosso time de vendas.
+                <strong>Importante:</strong> Estimativas de referência com base em dados proprietários da Onfly. 
+                Para um cálculo preciso e personalizado, entre em contato com nosso time de vendas.
               </p>
             </div>
           </div>
