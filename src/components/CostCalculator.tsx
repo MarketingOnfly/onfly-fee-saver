@@ -26,7 +26,7 @@ const CostCalculator = () => {
     gmv: 0,
     colaboradores: 0,
     mensalidadeConcorrente: 0,
-    feeAdicional: 2.0,
+    feeAdicional: 15.0,
     useDefaults: false
   });
 
@@ -190,7 +190,7 @@ const CostCalculator = () => {
                       step="0.5"
                       value={inputs.feeAdicional || ''}
                       onChange={(e) => handleInputChange('feeAdicional', Number(e.target.value))}
-                      placeholder="Ex: 2.0"
+                      placeholder="Ex: 15.0"
                       className="mt-1"
                     />
                   </div>
