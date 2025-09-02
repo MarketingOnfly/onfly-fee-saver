@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Calculator, TrendingDown, Users, Briefcase, DollarSign } from 'lucide-react';
+import { parseBrazilianNumber, formatBrazilianNumber } from '@/lib/utils';
 
 interface CalculatorInputs {
   gmv: number;
@@ -28,6 +29,13 @@ const CostCalculator = () => {
     mensalidadeConcorrente: 0,
     feeAdicional: 0,
     useDefaults: false
+  });
+
+  // Display values for formatted inputs
+  const [displayValues, setDisplayValues] = useState({
+    gmv: '',
+    mensalidadeConcorrente: '',
+    feeAdicional: ''
   });
 
   const [results, setResults] = useState<Results>({
@@ -99,6 +107,24 @@ const CostCalculator = () => {
     setInputs(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleFormattedInputChange = (field: 'gmv' | 'mensalidadeConcorrente' | 'feeAdicional', value: string) => {
+    // Update display value
+    setDisplayValues(prev => ({ ...prev, [field]: value }));
+    
+    // Parse and update actual value
+    const numericValue = parseBrazilianNumber(value);
+    setInputs(prev => ({ ...prev, [field]: numericValue }));
+  };
+
+  const handleFormattedInputBlur = (field: 'gmv' | 'mensalidadeConcorrente' | 'feeAdicional') => {
+    // Format the value on blur for better UX
+    const currentValue = inputs[field];
+    if (currentValue > 0) {
+      const formatted = formatBrazilianNumber(currentValue, field === 'feeAdicional');
+      setDisplayValues(prev => ({ ...prev, [field]: formatted }));
+    }
+  };
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -138,10 +164,11 @@ const CostCalculator = () => {
                 <Label htmlFor="gmv-competitor" className="text-sm font-medium">GMV Transacionado (R$)</Label>
                 <Input
                   id="gmv-competitor"
-                  type="number"
-                  value={inputs.gmv || ''}
-                  onChange={(e) => handleInputChange('gmv', Number(e.target.value))}
-                  placeholder="Ex: 100000"
+                  type="text"
+                  value={displayValues.gmv}
+                  onChange={(e) => handleFormattedInputChange('gmv', e.target.value)}
+                  onBlur={() => handleFormattedInputBlur('gmv')}
+                  placeholder="Ex: 1.000.000"
                   className="mt-1"
                 />
               </div>
@@ -175,9 +202,10 @@ const CostCalculator = () => {
                     <Label htmlFor="mensalidade" className="text-sm font-medium">Mensalidade por usuário (R$)</Label>
                     <Input
                       id="mensalidade"
-                      type="number"
-                      value={inputs.mensalidadeConcorrente || ''}
-                      onChange={(e) => handleInputChange('mensalidadeConcorrente', Number(e.target.value))}
+                      type="text"
+                      value={displayValues.mensalidadeConcorrente}
+                      onChange={(e) => handleFormattedInputChange('mensalidadeConcorrente', e.target.value)}
+                      onBlur={() => handleFormattedInputBlur('mensalidadeConcorrente')}
                       placeholder="Ex: 30"
                       className="mt-1"
                     />
@@ -186,10 +214,10 @@ const CostCalculator = () => {
                     <Label htmlFor="fee-adicional" className="text-sm font-medium">Fee por Necessidade (R$)</Label>
                     <Input
                       id="fee-adicional"
-                      type="number"
-                      step="0.5"
-                      value={inputs.feeAdicional || ''}
-                      onChange={(e) => handleInputChange('feeAdicional', Number(e.target.value))}
+                      type="text"
+                      value={displayValues.feeAdicional}
+                      onChange={(e) => handleFormattedInputChange('feeAdicional', e.target.value)}
+                      onBlur={() => handleFormattedInputBlur('feeAdicional')}
                       placeholder="Ex: 15"
                       className="mt-1"
                     />
@@ -225,10 +253,11 @@ const CostCalculator = () => {
               <div>
                 <Label className="text-sm font-medium">GMV Transacionado (R$)</Label>
                 <Input
-                  type="number"
-                  value={inputs.gmv || ''}
-                  onChange={(e) => handleInputChange('gmv', Number(e.target.value))}
-                  placeholder="Ex: 100000"
+                  type="text"
+                  value={displayValues.gmv}
+                  onChange={(e) => handleFormattedInputChange('gmv', e.target.value)}
+                  onBlur={() => handleFormattedInputBlur('gmv')}
+                  placeholder="Ex: 1.000.000"
                   className="mt-1"
                 />
               </div>
