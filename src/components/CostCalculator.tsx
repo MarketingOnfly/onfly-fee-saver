@@ -255,9 +255,6 @@ const CostCalculator = () => {
                 <p className="text-xs text-success mt-1">✓ Sem fees adicionais por necessidades</p>
               </div>
 
-              <div className="p-4 bg-primary/10 rounded-lg">
-                <p className="text-sm text-primary font-medium">✓ Fee transparente baseado no GMV</p>
-              </div>
             </div>
           </div>
         </Card>
