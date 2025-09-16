@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Calculator, TrendingDown, Users, Briefcase, DollarSign } from 'lucide-react';
+import { Calculator, TrendingDown, Users, Briefcase, DollarSign, Coins } from 'lucide-react';
 import { parseBrazilianNumber, formatBrazilianNumber } from '@/lib/utils';
 
 interface CalculatorInputs {
@@ -233,7 +233,7 @@ const CostCalculator = () => {
           <div className="space-y-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
-                <TrendingDown className="w-5 h-5 text-primary-foreground" />
+                <Coins className="w-5 h-5 text-primary-foreground" />
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-primary">Onfly</h3>
@@ -314,7 +314,7 @@ const CostCalculator = () => {
 
               <div className="p-6 bg-primary/10 rounded-lg">
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <TrendingDown className="w-5 h-5 text-primary" />
+                  <Coins className="w-5 h-5 text-primary" />
                   <span className="text-sm font-medium text-primary">Onfly</span>
                 </div>
                 <p className="text-2xl font-bold text-primary">{formatCurrency(results.custoOnfly)}</p>
