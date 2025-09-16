@@ -19,6 +19,7 @@ interface Results {
   custoConcorrente: number;
   custoOnfly: number;
   economia: number;
+  economiaAnual: number;
   showSpecialistMessage: boolean;
 }
 
@@ -42,6 +43,7 @@ const CostCalculator = () => {
     custoConcorrente: 0,
     custoOnfly: 0,
     economia: 0,
+    economiaAnual: 0,
     showSpecialistMessage: false
   });
 
@@ -54,6 +56,7 @@ const CostCalculator = () => {
         custoConcorrente: 0, 
         custoOnfly: 0, 
         economia: 0, 
+        economiaAnual: 0,
         showSpecialistMessage: true 
       });
       return;
@@ -95,8 +98,9 @@ const CostCalculator = () => {
     }
 
     const economia = custoConcorrente - custoOnfly;
+    const economiaAnual = economia * 12;
 
-    setResults({ custoConcorrente, custoOnfly, economia, showSpecialistMessage: false });
+    setResults({ custoConcorrente, custoOnfly, economia, economiaAnual, showSpecialistMessage: false });
   };
 
   useEffect(() => {
@@ -310,7 +314,7 @@ const CostCalculator = () => {
           <div className="text-center space-y-6">
             <h3 className="text-2xl font-bold text-foreground">Resultado da Comparação</h3>
             
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div className="p-6 bg-competitor-light rounded-lg">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <Briefcase className="w-5 h-5 text-competitor" />
@@ -328,16 +332,29 @@ const CostCalculator = () => {
                 <p className="text-2xl font-bold text-primary">{formatCurrency(results.custoOnfly)}</p>
                 <p className="text-xs text-muted-foreground mt-1">Custo mensal total</p>
               </div>
+            </div>
 
+            <div className="grid md:grid-cols-2 gap-6">
               <div className="p-6 bg-success-light rounded-lg">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <DollarSign className="w-5 h-5 text-success" />
-                  <span className="text-sm font-medium text-success">Economia</span>
+                  <span className="text-sm font-medium text-success">Economia Mensal</span>
                 </div>
                 <p className={`text-2xl font-bold ${results.economia > 0 ? 'text-success' : 'text-destructive'}`}>
                   {formatCurrency(results.economia)}
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">Economia mensal</p>
+                <p className="text-xs text-muted-foreground mt-1">Economia por mês</p>
+              </div>
+
+              <div className="p-6 bg-gradient-to-br from-success-light to-success/20 rounded-lg border border-success/20">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <DollarSign className="w-5 h-5 text-success" />
+                  <span className="text-sm font-medium text-success">Economia Anual</span>
+                </div>
+                <p className={`text-3xl font-bold ${results.economiaAnual > 0 ? 'text-success' : 'text-destructive'}`}>
+                  {formatCurrency(results.economiaAnual)}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">Economia em 12 meses</p>
               </div>
             </div>
 
