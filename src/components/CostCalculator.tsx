@@ -50,18 +50,6 @@ const CostCalculator = () => {
   const calculateResults = () => {
     const { gmv, colaboradores, mensalidadeConcorrente, feeAdicional, useDefaults } = inputs;
 
-    // Verificar se há mais de 1500 colaboradores
-    if (colaboradores > 1500) {
-      setResults({ 
-        custoConcorrente: 0, 
-        custoOnfly: 0, 
-        economia: 0, 
-        economiaAnual: 0,
-        showSpecialistMessage: true 
-      });
-      return;
-    }
-
     // Calcular número de viajantes (40% dos colaboradores)
     const viajantes = Math.round(colaboradores * 0.4);
 
@@ -71,8 +59,8 @@ const CostCalculator = () => {
       taxaOnfly = 0.0098; // 0.98%
     } else if (colaboradores <= 700) {
       taxaOnfly = 0.0107; // 1.07%
-    } else if (colaboradores <= 1500) {
-      taxaOnfly = 0.0117; // 1.17%
+    } else {
+      taxaOnfly = 0.0117; // 1.17% para empresas com mais de 700 colaboradores
     }
 
     const custoOnfly = gmv * taxaOnfly;
