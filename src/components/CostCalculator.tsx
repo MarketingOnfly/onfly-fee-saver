@@ -302,7 +302,7 @@ const CostCalculator = () => {
           <div className="text-center space-y-6">
             <h3 className="text-2xl font-bold text-foreground">Resultado da Comparação</h3>
             
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="p-6 bg-competitor-light rounded-lg">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <Briefcase className="w-5 h-5 text-competitor" />
@@ -320,9 +320,7 @@ const CostCalculator = () => {
                 <p className="text-2xl font-bold text-primary">{formatCurrency(results.custoOnfly)}</p>
                 <p className="text-xs text-muted-foreground mt-1">Custo mensal total</p>
               </div>
-            </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
               <div className="p-6 bg-success-light rounded-lg">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <DollarSign className="w-5 h-5 text-success" />
